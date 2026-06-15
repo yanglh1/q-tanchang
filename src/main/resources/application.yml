@@ -1,0 +1,51 @@
+server:
+  port: 8818
+
+# --------------------------------------- 用户自定义修改项 ------------------------------------
+# web登录管理员账号密码
+web:
+  # 管理员账号密码，建议通过环境变量覆盖：WEB_ACCOUNT / WEB_PASSWORD
+  account: ${WEB_ACCOUNT:changeme}
+  password: ${WEB_PASSWORD:changeme_strong_password}
+# --------------------------------------- 用户自定义修改项 ------------------------------------
+
+spring:
+  threads:
+    virtual:
+      enabled: true
+  datasource:
+    driver-class-name: org.sqlite.JDBC
+    url: jdbc:sqlite:q-tanchang.db
+  sql:
+    init:
+      mode: always
+  ai:
+    openai:
+      # AI API Key 建议通过环境变量设置：AI_API_KEY
+      api-key: ${AI_API_KEY:sk-xxx}
+      base-url: https://api.siliconflow.cn
+      chat:
+        options:
+#          model: deepseek-ai/DeepSeek-R1-0528-Qwen3-8B
+          model: deepseek-ai/DeepSeek-R1-Distill-Qwen-7B
+
+mybatis-plus:
+  mapper-locations: classpath*:com/yohann/ocihelper/mapper/xml/*.xml
+
+logging:
+  pattern:
+    # console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+    console: "%d{yyyy-MM-dd HH:mm:ss} %-5level %msg%n"
+  level:
+    com.oracle.bmc: error
+    c.o.b.h.c.j: error
+    org.telegram.telegrambots.longpolling.BotSession: off
+
+# 密钥文件存放目录（如果是docker部署则不用修改）
+oci-cfg:
+  boot-broadcast-url: https://backend.oci-helper.de5.net/api/boot
+  # Telegram Bot Token 建议通过环境变量设置：BOOT_BROADCAST_CHANNEL
+  boot-broadcast-channel: ${BOOT_BROADCAST_CHANNEL:}
+#  key-dir-path: /app/oci-helper/keys
+#  key-dir-path: C:\Users\Yohann\Desktop
+  key-dir-path: ${OCI_KEY_DIR:/app/oci-helper/keys}
